@@ -38,9 +38,11 @@ namespace CosmosDataGen
 
         private async Task ExecuteAsync(Config config)
         {
+            Console.WriteLine("Attempting to connect to {0}", config.EndPoint);
+
             using (CosmosClient cosmosClient = CreateCosmosClient(config))
             {
-                Console.WriteLine("Connected Cosmos DB Client: {0}", cosmosClient.Endpoint);
+                Console.WriteLine("Connected Cosmos DB Client: {0}\nConnection mode: {1}", cosmosClient.Endpoint, cosmosClient.ClientOptions.ConnectionMode);
 
                 Microsoft.Azure.Cosmos.Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(config.Database);
                 Console.WriteLine("Connected to Database: {0}", database.Id);
@@ -141,7 +143,8 @@ namespace CosmosDataGen
             CosmosClientOptions clientOptions = new Microsoft.Azure.Cosmos.CosmosClientOptions()
             {
                 ApplicationName = "CosmosDataGen",
-                MaxRetryAttemptsOnRateLimitedRequests = 0
+                MaxRetryAttemptsOnRateLimitedRequests = 10,
+                ConnectionMode = ("gateway" == config.ConnectionPolicy.ToLower() ? ConnectionMode.Gateway  : ConnectionMode.Direct)
             };
 
             return new CosmosClient(

@@ -13,7 +13,7 @@ Possible uses:
 ## Usage:
 
 ```
-COSMOSDBGEN -e uri -k accesskey [--database db] [--container data] [-t 4000] [-n 200000] [-p -1]
+COSMOSDBGEN -e uri -k accesskey [--database db] [--container data] [-t 4000] [-n 200000] [--dp -1] [--cp Direct|Gateway]
 
 -e              Required. Azure Cosmos DB account endpoint URI
 -k              Required. Azure Cosmos DB account Read-write access key
@@ -21,7 +21,8 @@ COSMOSDBGEN -e uri -k accesskey [--database db] [--container data] [-t 4000] [-n
 --container     Target Container to use: default "data"
 -t              Container throughput: default 4000
 -n              Number of documents to insert: default 200000
---dp            Degree of parallelism: default -1 (automatic)
+--dp            Number of parallel tasks to create: default -1 (automatic), 1 = Just one task"
+--cp            Connection policy: Use Direct or Gateway connection mode
 ```
 
 ## External Nuget Dependencies:

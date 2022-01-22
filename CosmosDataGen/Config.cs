@@ -31,6 +31,9 @@ namespace CosmosDataGen
         [Option("dp", Required = false, HelpText = "Degree of parallism")]
         public int DegreeOfParallelism { get; set; } = -1;
 
+        [Option("cp", Required = false, HelpText = "Connection Policy: Direct|Gateway")]
+        public string ConnectionPolicy { get; set; } = "Direct";
+
         internal int GetTaskCount(int containerThroughput)
         {
             int taskCount = this.DegreeOfParallelism;
@@ -78,19 +81,22 @@ namespace CosmosDataGen
 
             // Display Help
             Console.WriteLine("Command Line.\n");
-            Console.WriteLine("  -e                  Required.Cosmos account end point");
-            Console.WriteLine("  -k                  Required.Cosmos account master key");
-            Console.WriteLine("  --database          Database to use");
-            Console.WriteLine("  --container         Container to use");
-            Console.WriteLine("  -t                  Container throughput use");
-            Console.WriteLine("  -n                  Number of documents to insert");
-            Console.WriteLine("  -p                  Degree of parallism");
+            Console.WriteLine("  -e                  Required. Azure Cosmos DB account endpoint URI");
+            Console.WriteLine("  -k                  Required. Azure Cosmos DB account Read-write access key");
+            Console.WriteLine("  --database          Target Database to use: default \"db\"");
+            Console.WriteLine("  --container         Target Container to use: default \"data\"");
+            Console.WriteLine("  -t                  Container throughput: default 4000");
+            Console.WriteLine("  -n                  Number of documents to insert: default 200000");
+            Console.WriteLine("  --dp                Number of parallel tasks to create: default -1 (automatic), 1 = Just one task");
+            Console.WriteLine("  --cp                Connection policy: Direct or Gateway connection mode: Default Direct");
+            Console.WriteLine("\nExample:");
+            Console.WriteLine("\nCOSMOSDBGEN -e uri -k accesskey [--database db] [--container data] [-t 4000] [-n 200000] [--dp -1] [--cp Direct|Gateway]\n\n");
 
             using (ConsoleColorContext ct = new ConsoleColorContext(ConsoleColor.Red))
             {
                 foreach (Error e in errors)
                 {
-                    Console.WriteLine(e.ToString());
+                    Console.WriteLine("Command Line error:{0}", e.ToString());
                 }
             }
 
